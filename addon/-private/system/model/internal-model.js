@@ -435,6 +435,27 @@ InternalModel.prototype = {
     this.record._notifyProperties(dirtyKeys);
 
   },
+
+  /*
+    @method rollback
+    @public
+    @param {}
+  */
+  rollback() {
+    this.rollbackAttributes();
+    this.rollbackRelationships();
+  },
+
+  /*
+    @method rollbackRelationships
+    @private
+  */
+  rollbackRelationships() {
+    this.eachRelationship((name, relationship) => {
+      this._relationships.get(name).rollback();
+    });
+  },
+
   /*
     @method transitionTo
     @private

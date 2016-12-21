@@ -124,6 +124,20 @@ var Model = Ember.Object.extend(Ember.Evented, {
   hasDirtyAttributes: Ember.computed('currentState.isDirty', function() {
     return this.get('currentState.isDirty');
   }),
+
+  /**
+    If this property is `true` the record's relationship is in the `dirty` state. The
+    record's relationship has local changes that have not yet been saved by the
+    adapter. This includes records that have been created (but not yet
+    saved) or deleted.
+
+    @property hasDirtyRelationships
+    @type {Boolean}
+    @readOnly
+  */
+  hasDirtyRelationships: function() {
+    return this._internalModel._relationships.isDirty();
+  },
   /**
     If this property is `true` the record is in the `saving` state. A
     record enters the saving state when `save` is called, but the
@@ -617,6 +631,10 @@ var Model = Ember.Object.extend(Ember.Evented, {
     return this._internalModel.changedAttributes();
   },
 
+  rollback() {
+    this._internalModel.rollback();
+  },
+
   //TODO discuss with tomhuda about events/hooks
   //Bring back as hooks?
   /**
@@ -653,6 +671,10 @@ var Model = Ember.Object.extend(Ember.Evented, {
   */
   rollbackAttributes() {
     this._internalModel.rollbackAttributes();
+  },
+
+  rollbackRelationships: function() {
+    this._internalModel.rollbackRelationships();
   },
 
   /*

@@ -37,3 +37,12 @@ Relationships.prototype.get = function(key) {
   }
   return relationships[key];
 };
+
+Relationships.prototype.isDirty = function() {
+  var relationshipsByName = get(this.record.type, 'relationshipsByName');
+  var keys = relationshipsByName._keys.toArray();
+
+  return keys.some((key) => {
+    return this.get(key).isDirty;
+  });
+};
